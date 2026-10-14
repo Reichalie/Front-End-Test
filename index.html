@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Information Form</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            margin: 0;
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 5px;
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Personal Information</h2>
+
+        <form id="myForm">
+
+            <label for="name">First Name:</label>
+            <input type="text" id="name" required>
+
+            <label for="surname">Surname:</label>
+            <input type="text" id="surname" required>
+
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" required>
+
+            <label for="gender">Gender:</label>
+            <select id="gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+                <option value="Prefer not to say">
+                    Prefer not to say
+                </option>
+            </select>
+
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone"
+                   pattern="[0-9+() .-]{7,20}"
+                   title="Enter a valid phone number"
+                   required>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <div id="result" hidden></div>
+
+        <button type="button" id="clearBtn">Clear Form</button>
+    </div>
+
+    <script>
+        const form = document.getElementById("myForm");
+        const result = document.getElementById("result");
+
+        // Prevent future dates of birth.
+        document.getElementById("dob").max =
+            new Date().toISOString().split("T")[0];
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+            const surname = document.getElementById("surname").value.trim();
+            const dob = document.getElementById("dob").value;
+            const gender = document.getElementById("gender").value;
+            const email = document.getElementById("email").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+
+            result.replaceChildren();
+
+            const heading = document.createElement("h3");
+            heading.textContent = "Form Submitted Successfully!";
+            result.appendChild(heading);
+
+            const details = [
+                ["First Name", name],
+                ["Surname", surname],
+                ["Date of Birth", dob],
+                ["Gender", gender],
+                ["Email", email],
+                ["Phone Number", phone]
+            ];
+
+            details.forEach(function(item) {
+                const paragraph = document.createElement("p");
+                const label = document.createElement("strong");
+
+                label.textContent = item[0] + ": ";
+                paragraph.appendChild(label);
+                paragraph.appendChild(
+                    document.createTextNode(item[1])
+                );
+
+                result.appendChild(paragraph);
+            });
+
+            result.hidden = false;
+        });
+
+        document.getElementById("clearBtn")
+            .addEventListener("click", function() {
+                form.reset();
+                result.replaceChildren();
+                result.hidden = true;
+            });
+    </script>
+
+</body>
+</html>
